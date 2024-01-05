@@ -12,6 +12,7 @@ import { loadUser } from './actions/userActions';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import Search from './components/publications/Search';
 import Publications from './components/publications/Publications';
+import Dashboard from './components/admin/Dashboard'
 import PublicationDetails from './components/publications/PublicationDetails';
 function App() {
   const dispatch=useDispatch()
@@ -36,6 +37,14 @@ function App() {
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
               <Account />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} isAdmin={true}>
+              <Dashboard />
             </ProtectedRoute>
           }
         />

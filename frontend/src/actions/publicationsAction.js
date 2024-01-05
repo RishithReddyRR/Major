@@ -18,6 +18,23 @@ export const getUserPublications = (name,currentPage) => async (dispatch) => {
         dispatch({type:"PUBLICATION_FAIL",payload:error.response.data.message})
     }
   }
+  //get Admin publications
+export const getAdminPublications = () => async (dispatch) => {
+    try {
+        const config = {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          };
+
+        dispatch({type:"PUBLICATION_ADMIN_REQUEST"})
+    const {data}=await axios.get(`/publication/admin/publications`,config);
+    dispatch({type:"PUBLICATION_ADMIN_SUCCESS",payload:data})
+
+    } catch (error) {
+        dispatch({type:"PUBLICATION_ADMIN_FAIL",payload:error.response.data.message})
+    }
+  }
 export const getPublications = (keyword,currentPage,category,value,setValue,ppp,fYear,tYear,fMonth,currentYear) => async (dispatch) => {
   keyword=keyword==undefined?"":keyword
   tYear=tYear==""?currentYear:tYear

@@ -10,7 +10,7 @@ const axios=require("axios")
 require('dotenv').config({
     path:"../config/.env"
 })
-//creating a user
+//creating a use
 exports.createUser = asyncErrorHandler(async (req, res, next) => {
   // const myCloud= await cloudinary.v2.uploader.upload(req.body.avatar,{
   //   folder:"avatars",

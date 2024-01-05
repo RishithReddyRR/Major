@@ -36,7 +36,7 @@ const Account = () => {
     countArray,
   } = useSelector((state) => state.userPublications);
   let ob=useSelector((state)=>{
-    console.log(state)
+   
     return state.publicationUpload})
   ob=ob?ob:{}
   const [currentPage, setCurrentPageNo] = useState(1);

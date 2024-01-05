@@ -25,47 +25,46 @@ exports.getPublicationsOfUser = asyncErrorHandler(async (req, res, next) => {
     .limit(resultPerPage)
     .skip(skip);
   let tempP;
-  let countArray=[]
+  let countArray = [];
   tempP = await publication.find({
     nameOfAuthor: name,
     typeOfPublication: {
-      $regex:"journal",
+      $regex: "journal",
       $options: "i",
     },
   });
-  countArray.push(tempP.length)
+  countArray.push(tempP.length);
+  tempP = await publication.find({
+    typeOfPublication: {
+      $regex: "book chapter",
+      $options: "i",
+    },
+  });
+  countArray.push(tempP.length);
   tempP = await publication.find({
     nameOfAuthor: name,
     typeOfPublication: {
-      $regex:"book chapter",
+      $regex: "conference",
       $options: "i",
     },
   });
-  countArray.push(tempP.length)
+  countArray.push(tempP.length);
   tempP = await publication.find({
     nameOfAuthor: name,
     typeOfPublication: {
-      $regex:"conference",
+      $regex: "patent",
       $options: "i",
     },
   });
-  countArray.push(tempP.length)
+  countArray.push(tempP.length);
   tempP = await publication.find({
     nameOfAuthor: name,
     typeOfPublication: {
-      $regex:"patent",
+      $regex: "copyright",
       $options: "i",
     },
   });
-  countArray.push(tempP.length)
-  tempP = await publication.find({
-    nameOfAuthor: name,
-    typeOfPublication: {
-      $regex:"copyright",
-      $options: "i",
-    },
-  });
-  countArray.push(tempP.length)
+  countArray.push(tempP.length);
 
   // console.log(publications)
   res.status(200).json({
@@ -74,7 +73,7 @@ exports.getPublicationsOfUser = asyncErrorHandler(async (req, res, next) => {
     publicationsCount,
     resultPerPage,
     tPub,
-    countArray
+    countArray,
   });
 });
 
@@ -120,5 +119,145 @@ exports.getPublicationDetails = asyncErrorHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     publicationDetails,
+  });
+});
+
+//get publications for @admin
+
+exports.getPublicationsAdmin = asyncErrorHandler(async (req, res, next) => {
+  const pub = await publication.find({});
+  const publicationsCount = pub.length;
+  let countArray = [];
+  tempP = await publication.find({
+    typeOfPublication: {
+      $regex: "journal",
+      $options: "i",
+    },
+  });
+  countArray.push(tempP.length);
+  tempP = await publication.find({
+    $or: [
+      {
+        typeOfPublication: {
+          $regex: "book chapter",
+          $options: "i",
+        },
+      },
+      {
+        typeOfPublication: {
+          $regex: "bookchapter",
+          $options: "i",
+        },
+      },
+    ],
+  });
+  countArray.push(tempP.length);
+  tempP = await publication.find({
+    typeOfPublication: {
+      $regex: "conference",
+      $options: "i",
+    },
+  });
+  countArray.push(tempP.length);
+  tempP = await publication.find({
+    typeOfPublication: {
+      $regex: "patent",
+      $options: "i",
+    },
+  });
+  countArray.push(tempP.length);
+  tempP = await publication.find({
+    typeOfPublication: {
+      $regex: "copyright",
+      $options: "i",
+    },
+  });
+  countArray.push(tempP.length);
+  //year wise count
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const yearCount = [];
+  for (let i = 0; i < 15; i++) {
+    const x = await publication.find({ year: currentYear - i });
+    let ob = {
+      year: currentYear - i,
+      count: x.length,
+    };
+    yearCount.unshift(ob);
+  }
+  const yearCountEach = [];
+  for (let i = 0; i < 10; i++) {
+    const cJ = await publication.find({
+      $and: [
+        { year: currentYear - i },
+        {
+          typeOfPublication: {
+            $regex: "journal",
+            $options: "i",
+          },
+        },
+      ],
+    });
+    const cB = await publication.find({
+      $and: [
+        { year: currentYear - i },
+        {
+          typeOfPublication: {
+            $regex: "Book chapter",
+            $options: "i",
+          },
+        },
+      ],
+    });
+    const cC = await publication.find({
+      $and: [
+        { year: currentYear - i },
+        {
+          typeOfPublication: {
+            $regex: "conference",
+            $options: "i",
+          },
+        },
+      ],
+    });
+    const cP = await publication.find({
+      $and: [
+        { year: currentYear - i },
+        {
+          typeOfPublication: {
+            $regex: "patent",
+            $options: "i",
+          },
+        },
+      ],
+    });
+    const cCR = await publication.find({
+      $and: [
+        { year: currentYear - i },
+        {
+          typeOfPublication: {
+            $regex: "copyright",
+            $options: "i",
+          },
+        },
+      ],
+    });
+    let ob = {
+      year: currentYear - i,
+      countJ: cJ.length,
+      countB: cB.length,
+      countC: cC.length,
+      countP: cP.length,
+      countCR: cCR.length,
+    };
+    yearCountEach.unshift(ob);
+  }
+  res.status(200).json({
+    success: true,
+    publications: pub,
+    publicationsCount,
+    countArray,
+    yearCount,
+    yearCountEach
   });
 });
