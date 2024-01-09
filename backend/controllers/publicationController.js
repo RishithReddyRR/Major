@@ -35,6 +35,7 @@ exports.getPublicationsOfUser = asyncErrorHandler(async (req, res, next) => {
   });
   countArray.push(tempP.length);
   tempP = await publication.find({
+    nameOfAuthor: name,
     typeOfPublication: {
       $regex: "book chapter",
       $options: "i",
@@ -122,7 +123,7 @@ exports.getPublicationDetails = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
-//get publications for @admin
+//get publications counts for @admin
 
 exports.getPublicationsAdmin = asyncErrorHandler(async (req, res, next) => {
   const pub = await publication.find({});
@@ -254,10 +255,21 @@ exports.getPublicationsAdmin = asyncErrorHandler(async (req, res, next) => {
   }
   res.status(200).json({
     success: true,
-    publications: pub,
+    // publications: pub,
     publicationsCount,
     countArray,
     yearCount,
     yearCountEach
   });
 });
+
+
+//delete publication @admin
+exports.deletePublication = asyncErrorHandler(async (req, res, next) => {
+  const publicationDetails = await publication.findByIdAndDelete(req.params.id);
+  res.status(200).json({
+    success: true,
+    // publicationDetails,
+  });
+});
+

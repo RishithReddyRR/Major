@@ -88,3 +88,24 @@ export const publicationUploadReducer = createReducer(
     },
   }
 );
+export const publicationDeleteReducer = createReducer(
+  { error: null, loading: false, success: false,deleted:false },
+  {
+    PUBLICATION_DELETE_REQUEST: (state, action) => {
+      state.loading = true;
+    },
+    PUBLICATION_DELETE_SUCCESS: (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.deleted=!state.deleted
+    },
+    PUBLICATION_DELETE_FAIL: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    CLEAR_ERRORS: (state, action) => {
+      state.error = null;
+      state.success = false;
+    },
+  }
+);

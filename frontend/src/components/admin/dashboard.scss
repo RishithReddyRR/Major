@@ -36,6 +36,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    align-items:center;
     margin-top:2vmax;
     > div {
       width: 12vmax;
@@ -89,4 +90,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+
+.css-1jkcq86-MuiResponsiveChart-container{
+  width: 70vw !important;
+  height:70vh !important;
 }

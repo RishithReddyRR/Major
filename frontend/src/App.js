@@ -13,6 +13,7 @@ import ProtectedRoute from './components/routes/ProtectedRoute';
 import Search from './components/publications/Search';
 import Publications from './components/publications/Publications';
 import Dashboard from './components/admin/Dashboard'
+import AdminPublications from './components/admin/AdminPublications.jsx'
 import PublicationDetails from './components/publications/PublicationDetails';
 function App() {
   const dispatch=useDispatch()
@@ -45,6 +46,14 @@ function App() {
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated} isAdmin={true}>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/publications"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} isAdmin={true}>
+              <AdminPublications />
             </ProtectedRoute>
           }
         />

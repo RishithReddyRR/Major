@@ -8,6 +8,7 @@ import { HashLoader } from "react-spinners";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { LineChart } from '@mui/x-charts/LineChart';
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const chartSetting = {
@@ -16,15 +17,20 @@ const Dashboard = () => {
         label: "Publications Count",
       },
     ],
-    width: 1000,
-    height: 600,
+    width: 600,
+    height: 400,
   };
   const dispatch = useDispatch();
-  const { publications, publicationsCount, countArray, loading, yearCount,yearCountEach } =
+  const navigate=useNavigate()
+  const { publications, publicationsCount, countArray, loading, yearCount,yearCountEach,error } =
     useSelector((state) => state.publicationsAdmin);
   useEffect(() => {
     dispatch(getAdminPublications());
-  }, []);
+    if(error){
+      dispatch({type:"CLEAR_ERRORS"})
+      navigate("/")
+    }
+  }, [error]);
   return (
     <div className="dashboard">
       <MetaData title={"admin--Dashboard"} />
